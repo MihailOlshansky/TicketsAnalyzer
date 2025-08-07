@@ -3,8 +3,8 @@ package org.example.ticket;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
@@ -19,10 +19,15 @@ public class TicketAnalyzer {
     private final List<Ticket> tickets;
 
     public TicketAnalyzer(String filePath) throws IOException {
+        InputStream inputStream = TicketAnalyzer.class.getClassLoader().getResourceAsStream(filePath);
+
+        if (inputStream == null) {
+            throw new RuntimeException("Resource not found: " + filePath);
+        }
+
         ObjectMapper mapper = new ObjectMapper();
 
-        tickets = mapper.readValue(new File(filePath),
-                new TypeReference<TicketList>(){}).getTickets();
+        tickets = mapper.readValue(inputStream, new TypeReference<TicketList>(){}).getTickets();
     }
 
     public Map<String, Integer> minTravelDuration(String origin, String destination) {

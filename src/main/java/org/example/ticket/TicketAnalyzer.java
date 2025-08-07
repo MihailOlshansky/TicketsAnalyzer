@@ -61,10 +61,10 @@ public class TicketAnalyzer {
 
         BigDecimal avgPrice = sortedPrices.stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .divide(BigDecimal.valueOf(tickets.size()), 3, RoundingMode.HALF_UP);
+                .divide(BigDecimal.valueOf(sortedPrices.size()), 3, RoundingMode.HALF_UP);
 
-        BigDecimal medianPrice = sortedPrices.get(tickets.size() / 2)
-                .add(sortedPrices.get((tickets.size() - 1) / 2))
+        BigDecimal medianPrice = sortedPrices.get(sortedPrices.size() / 2)
+                .add(sortedPrices.get((sortedPrices.size() - 1) / 2))
                 .divide(BigDecimal.valueOf(2), 3, RoundingMode.HALF_UP);
         return avgPrice.subtract(medianPrice).abs();
     }
